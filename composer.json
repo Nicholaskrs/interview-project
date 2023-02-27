@@ -8,6 +8,11 @@
             "Nicholas\\InterviewProject\\": "src/"
         }
     },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ]
+    },
     "authors": [
         {
             "name": "Nicholas Krisna",

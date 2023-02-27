@@ -12,21 +12,23 @@ class FileHelper
     {
         $result = [];
         if (($handle = fopen(__DIR__ . "\\..\\..\\" . $filename, "r")) !== FALSE) {
-            $header = fgetcsv($handle, 10000, $delimiter);
+            $header = fgetcsv($handle, 1, $delimiter);
             while (($data = fgetcsv($handle, 10000, $delimiter)) !== FALSE) {
-                $result = $this->getResult($data, $result,$header);
+                $result = $this->getResult($data, $result, $header);
             }
             fclose($handle);
         }
-        return $result;
+        return array_values($result);
     }
 
     public function getResult($data, array $result, $header = null): array
     {
         $index = implode(".", $data);
         if (!isset($result[$index])) {
+
             if ($header !== null) {
                 foreach ($header as $num => $h) {
+
                     $result[$index]['data'][$h] = $data[$num];
                 }
             } else {
@@ -36,7 +38,7 @@ class FileHelper
         } else {
             $result[$index]['data']['counter']++;
         }
-        return array_values($result);
+        return $result;
     }
 
     public function getDataFromJSON($filename)
@@ -47,7 +49,7 @@ class FileHelper
         foreach ($jsonData as $data) {
             $result = $this->getResult($data, $result);
         }
-        return $result;
+        return array_values($result);
     }
 
     public function getDataFromXML($filename)
@@ -62,7 +64,7 @@ class FileHelper
         foreach ($jsonData['product'] as $data) {
             $result = $this->getResult($data, $result);
         }
-        return $result;
+        return array_values($result);
     }
 
     public function saveToCSV($fp, $data)
@@ -76,7 +78,7 @@ class FileHelper
     public function saveToTSV($fp, $data)
     {
         foreach ($data as $fields) {
-            fputcsv($fp, $fields['data'],"\t");
+            fputcsv($fp, $fields['data'], "\t");
         }
         return true;
     }
@@ -91,16 +93,18 @@ class FileHelper
     public function writeResultToFile($filename, $fileExtension, $data)
     {
 
-        $result=true;
+        $result = true;
         $fp = fopen($filename, 'w');
         switch ($fileExtension) {
             case 'csv':
-                return $this->saveToCSV($fp, $data);
-
+                $result = $this->saveToCSV($fp, $data);
+                break;
             case 'json':
-                return $this->saveToJson($fp, $data);
+                $result = $this->saveToJson($fp, $data);
+                break;
             case 'tsv':
-                return $this->saveToTSV($fp,$data);
+                $result = $this->saveToTSV($fp, $data);
+                break;
             default:
                 return false;
         }
