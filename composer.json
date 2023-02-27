@@ -1,0 +1,17 @@
+{
+    "name": "nicholas/interview-project",
+    "require-dev": {
+        "phpunit/phpunit": "9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nicholas\\InterviewProject\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nicholas Krisna",
+            "email": "nicholaskrisnapl@gmail.com"
+        }
+    ]
+}
